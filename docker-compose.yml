@@ -7,6 +7,21 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     restart: unless-stopped
+    environment:
+      # https://github.com/LibreTranslate/LibreTranslate#arguments
+      # https://github.com/LibreTranslate/LibreTranslate#manage-api-keys
+      LT_HOST: 0.0.0.0 # 127.0.0.1
+      LT_PORT: 5000
+      LT_FRONTEND_TIMEOUT: 500
+      LT_API_KEYS: "true"
+      LT_API_KEYS_DB_PATH: /libretranslate_db.db
+      LT_THREADS: 2 # 4
+      LT_REQUIRE_API_KEY_ORIGIN: "true"
+      LT_REQ_LIMIT: 20 # no limit
+      LT_BATCH_LIMIT: 2 # no limit
+    volumes:
+      - ${DOCKER}/libretranslate_db/libretranslate_db.db:/libretranslate_db.db
+      - ${DOCKER}/libretranslate/.local:/home/libretranslate/.local
     ports:
       - "5000:5000"
     healthcheck:
@@ -21,3 +36,4 @@ services:
 
 # volumes:
 #   libretranslate_api_keys:
+
